@@ -1,0 +1,33 @@
+class Solution {
+    public List<Integer> majorityElement(int[] nums) {
+        int n = nums.length;
+        List<Integer> res = new ArrayList<>();
+        if (n == 0) return res;
+        if (n == 1) 
+        { 
+            res.add(nums[0]); 
+            return res;
+        }
+        
+        Arrays.sort(nums);
+        int third = n / 3;
+        int count = 1;
+        for (int i = 1; i < n; i ++)
+        {
+            if (nums[i] == nums[i-1])
+            {
+                count ++; // for nums[i]
+            }
+            else
+            {
+                if (count > third) res.add(nums[i-1]);
+                
+                count = 1; // for nums[i]
+            }
+        }
+        
+        if (count > third) res.add(nums[n-1]);
+        
+        return res;
+    }
+}
