@@ -1,0 +1,21 @@
+class Solution {
+    public void rotate(int[][] matrix) {
+        int n = matrix.length, half = matrix.length/2, columnStart = 0;
+        for (int row=0; row<half; row++) {
+            for (int column=columnStart; column<n-1; column++) {
+                rotateE(matrix, row, column);
+            }
+            n--;
+            columnStart++;
+        }
+    }
+    
+    public void rotateE(int[][] matrix, int row, int column) {
+        int n = matrix.length-1; 
+        int tmp1 = matrix[n-column][row], tmp2 = matrix[row][column], tmp3 = matrix[column][n-row], tmp4 = matrix[n-row][n-column];
+        matrix[row][column] = tmp1;
+        matrix[column][n-row] = tmp2;
+        matrix[n-row][n-column] = tmp3;
+        matrix[n-column][row] = tmp4;
+    }
+}
