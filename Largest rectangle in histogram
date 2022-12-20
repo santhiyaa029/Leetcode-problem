@@ -1,0 +1,51 @@
+struct tagStackObj{
+    int height;
+    int width;
+};
+
+int largestRectangleArea(int* heights, int heightsSize){
+    int maxSize = 0;
+    int squareSize = 0;
+    int i;
+    int *p = heights;
+    int index = 0;
+    int stride = 0;
+    struct tagStackObj *pStack = NULL;
+    
+    if (0 == heightsSize)
+        return 0;
+    
+    pStack = malloc(heightsSize * sizeof(struct tagStackObj));
+    pStack[index].width = 1;
+    pStack[index].height = heights[0];
+    
+    for (i = 1; i < heightsSize; i++){
+        if (p[i] >= pStack[index].height){
+            index++;
+            pStack[index].height = p[i];
+            pStack[index].width = 1;
+        }
+        else{
+            stride = 0;
+            while ((index >= 0) && (pStack[index].height > p[i])){
+                stride += pStack[index].width;
+                squareSize = stride * pStack[index].height;
+                maxSize = squareSize > maxSize ? squareSize : maxSize;
+                index--;
+            }
+            
+            pStack[++index].height = p[i];
+            pStack[index].width = stride + 1;
+        }
+    }
+    
+    stride = 0;
+    while ((index >= 0) && (pStack[index].height > -1)){
+        stride += pStack[index].width;
+        squareSize = stride * pStack[index].height;
+        maxSize = squareSize > maxSize ? squareSize : maxSize;
+        index--;
+    }
+    
+    return maxSize;
+}
