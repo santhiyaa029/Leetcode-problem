@@ -1,0 +1,69 @@
+int cmp(const void *a,const void *b){
+    return *(int *)a-*(int *)b;
+}
+int** fourSum(int* nums, int len, int target, int* returnSize, int** returnColumnSizes){
+    if(len<4){
+        *returnColumnSizes=NULL;
+        *returnSize=0;
+        return NULL;
+    }
+    qsort(nums,len,sizeof(int),cmp);
+    int cnt=0;
+    int base=8;
+    int **ans=malloc(sizeof(int *)*8);
+    int sum;
+    int l,r;
+    for(int i=0;i<len-3;i++){
+        if(i>0&&nums[i]==nums[i-1]){
+            continue;
+        }
+        if(nums[i]*4>target){
+            break;
+        }
+        for(int j=i+1;j<len-2;j++){
+            if(j>i+1&&nums[j]==nums[j-1]){
+                continue;
+            }
+            if(nums[j]*3+nums[i]>target||nums[len-1]*3+nums[i]<target){
+                break;
+            }
+            l=j+1;
+            r=len-1;
+            while(l<r){
+                sum=nums[i]+nums[j]+nums[l]+nums[r];
+                if(sum==target){
+                    ans[cnt]=malloc(sizeof(int)*4);
+                    ans[cnt][0]=nums[i];
+                    ans[cnt][1]=nums[j];
+                    ans[cnt][2]=nums[l];
+                    ans[cnt][3]=nums[r];
+                    cnt++;
+                    if(cnt==base){
+                        base*=2;
+                        ans=realloc(ans,sizeof(int *)*base);
+                    }
+                    while(l<r&&nums[l]==nums[l+1]){
+                        l++;
+                    }
+                    while(l<r&&nums[r]==nums[r-1]){
+                        r--;
+                    }
+                    l++;
+                    r--;
+                }
+                else if(sum>target){
+                    r--;
+                }
+                else{
+                    l++;
+                }
+            }
+        }
+    }
+    *returnColumnSizes=malloc(sizeof(int)*cnt);
+    for(int i=0;i<cnt;i++){
+        (*returnColumnSizes)[i]=4;
+    }
+    *returnSize=cnt;
+    return ans;
+}
