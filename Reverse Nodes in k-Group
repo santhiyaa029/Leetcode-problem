@@ -1,0 +1,35 @@
+struct ListNode* kSteps(struct ListNode* head, int k) {
+    for (int i = 1; i < k && head; i++)
+        if (head) head = head->next;
+
+    if (head) return head;
+    return NULL;
+}
+
+struct ListNode* reverseKGroup(struct ListNode* head, int k) {
+    if (k < 2) return head;
+    struct ListNode* prev = kSteps(head, k);
+    if (prev) {
+        struct ListNode* next = head, * curr = head, * tail = curr;
+        head = prev;
+        prev = prev->next;
+        for (int i = 0; i < k; i++) {
+            next = next->next;
+            curr->next = prev;
+            prev = curr;
+            curr = next;
+        }
+        while (prev = kSteps(curr, k)) {
+            tail->next = prev;
+            tail = curr;
+            prev = prev->next;
+            for (int i = 0; i < k; i++) {
+                next = next->next;
+                curr->next = prev;
+                prev = curr;
+                curr = next;
+            }
+        }
+    }
+    return head;
+}
